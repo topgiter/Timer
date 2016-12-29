@@ -49,6 +49,7 @@ class App extends Component {
         this.handleOpenModal = this.handleOpenModal.bind(this);
         this.handleChangeDescription = this.handleChangeDescription.bind(this);
         this.handleEditDescription = this.handleEditDescription.bind(this);
+        this.handleClickDelete = this.handleClickDelete.bind(this);
     }
 
     handleChangeClock(id, clock) {
@@ -183,6 +184,12 @@ class App extends Component {
         }
     }
 
+    handleClickDelete(timerId) {
+        this.setState({
+            completed: this.state.completed.filter(timer => timer.id !== timerId)
+        });
+    }
+
     render() {
         return (
             <div className="App">
@@ -212,6 +219,7 @@ class App extends Component {
                     title="Completed"
                     items={this.state.completed}
                     handleClickActive={this.handleClickActive}
+                    handleClickDelete={this.handleClickDelete}
                     onSortEnd={(e) => this.handleSortEnd('completed', e)}
                 />
 

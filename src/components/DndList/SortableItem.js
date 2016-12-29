@@ -10,7 +10,8 @@ const SortableItem = SortableElement(({
     handleClickStop,
     handleClickComplete,
     handleClickActive,
-    handleEditDescription
+    handleEditDescription,
+    handleClickDelete
 }) => {
     return (
         <li className="list-group-item">
@@ -23,6 +24,7 @@ const SortableItem = SortableElement(({
                 handleClickComplete={handleClickComplete}
                 handleClickActive={handleClickActive}
                 handleEditDescription={handleEditDescription}
+                handleClickDelete={handleClickDelete}
             />
         </li>
     );

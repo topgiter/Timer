@@ -13,6 +13,7 @@ const propTypes = {
     handleClickStop: PropTypes.func,
     handleClickComplete: PropTypes.func,
     handleEditDescription: PropTypes.func,
+    handleClickDelete: PropTypes.func
 };
 
 const defaultProps = {
@@ -79,13 +80,6 @@ class Timer extends Component {
         this.props.handleClickStop(this.props.id);
     }
 
-    handleClickActive(e) {
-        e.preventDefault();
-        e.stopPropagation();
-
-        this.props.handleClickActive(this.props.id);
-    }
-
     tick() {
         let now = Date.now();
         let clock = this.props.clock + (now - this.previousTickTime);
@@ -144,20 +138,34 @@ class Timer extends Component {
                                 buttonGroups.push(
                                     <DropdownButton
                                         key={2}
-                                        id="action-dropdown"
+                                        id="active-action-dropdown"
                                         title="Actions"
                                     >
                                         <MenuItem onClick={(e) => this.props.handleEditDescription(this.props.id)}>
                                             Edit description
                                         </MenuItem>
                                         <MenuItem onClick={(e) => this.props.handleClickComplete(this.props.id)}>
-                                            Mark as completed
+                                            Mark as Completed
+                                        </MenuItem>
+                                        <MenuItem onClick={(e) => {}}>
+                                            Add Manual time
                                         </MenuItem>
                                     </DropdownButton>
                                 );
                             } else {
                                 buttonGroups.push(
-                                    <Button key={1} bsStyle="primary" onClick={(e) => {this.handleClickActive(e)}}>Active</Button>
+                                    <DropdownButton
+                                        key={1}
+                                        id="completed-action-dropdown"
+                                        title="Actions"
+                                    >
+                                        <MenuItem onClick={(e) => this.props.handleClickActive(this.props.id)}>
+                                            Mark as Active
+                                        </MenuItem>
+                                        <MenuItem onClick={(e) => this.props.handleClickDelete(this.props.id)}>
+                                            Delete timer
+                                        </MenuItem>
+                                    </DropdownButton>
                                 );
                             }
 

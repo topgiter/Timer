@@ -11,7 +11,8 @@ const SortableList = SortableContainer(({
     handleClickStop,
     handleClickComplete,
     handleClickActive,
-    handleEditDescription
+    handleEditDescription,
+    handleClickDelete
 }) => {
     return (
         <ListGroup componentClass="ul">
@@ -27,6 +28,7 @@ const SortableList = SortableContainer(({
                     handleClickComplete={handleClickComplete}
                     handleClickActive={handleClickActive}
                     handleEditDescription={handleEditDescription}
+                    handleClickDelete={handleClickDelete}
                 />
             )}
         </ListGroup>
