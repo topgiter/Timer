@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import TimerList from './components/DndList/TimerList';
+import DescriptionModal from './components/Modals/DescriptionModal';
 import { arrayMove } from 'react-sortable-hoc';
+import { Grid, Row, Col, Button } from 'react-bootstrap';
+import './App.css';
 
 class App extends Component {
     constructor(props) {
@@ -29,7 +32,8 @@ class App extends Component {
                     isPlaying: false,
                 }
             ],
-            completed: []
+            completed: [],
+            isShowDescriptionModal: false
         };
 
         // Binding
@@ -39,6 +43,9 @@ class App extends Component {
         this.handleSortEnd = this.handleSortEnd.bind(this);
         this.handleClickComplete = this.handleClickComplete.bind(this);
         this.handleClickActive = this.handleClickActive.bind(this);
+        this.handleCloseModal = this.handleCloseModal.bind(this);
+        this.handleOpenModal = this.handleOpenModal.bind(this);
+        this.handleChangeDescription = this.handleChangeDescription.bind(this);
     }
 
     handleChangeClock(id, clock) {
@@ -120,9 +127,55 @@ class App extends Component {
         });
     }
 
+    handleCloseModal(modalName) {
+        this.setState({
+            [`isShow${modalName}Modal`]: false
+        });
+    }
+
+    handleOpenModal(modalName) {
+        this.setState({
+            [`isShow${modalName}Modal`]: true
+        });
+    }
+
+    handleChangeDescription(description, timerId) {
+        // TODO timer ID should be sync with backend DB
+
+        if (timerId === undefined) {
+            // Generate unique ID for each timer by using Date timestamp temperarily
+            const timerId = Date.now();
+
+            // Generate a new timer
+            const timerItem = {
+                id: timerId,
+                description: description,
+                clock: 0,
+                isPlaying: false
+            };
+
+            // Add new timer at top of Active list
+            this.setState({
+                active: [timerItem, ...this.state.active]
+            });
+        }
+    }
+
     render() {
         return (
             <div className="App">
+                <Grid>
+                    <Row>
+                        <Col className="text-right">
+                            <Button
+                                bsStyle="primary"
+                                onClick={(e) => this.handleOpenModal('Description')}
+                            >
+                                Add new timer
+                            </Button>
+                        </Col>
+                    </Row>
+                </Grid>
                 <TimerList
                     title="Active"
                     items={this.state.active}
@@ -137,6 +190,12 @@ class App extends Component {
                     items={this.state.completed}
                     handleClickActive={this.handleClickActive}
                     onSortEnd={(e) => this.handleSortEnd('completed', e)}
+                />
+
+                <DescriptionModal
+                    show={this.state.isShowDescriptionModal}
+                    onHide={(e) => this.handleCloseModal('Description')}
+                    onChangeDescription={this.handleChangeDescription}
                 />
             </div>
         );

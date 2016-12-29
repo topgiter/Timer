@@ -68,7 +68,6 @@ class Timer extends Component {
     handleClickStart(e) {
         e.preventDefault();
         e.stopPropagation();
-        console.log('clicked');
 
         this.props.handleClickStart(this.props.id);
     }
@@ -76,7 +75,6 @@ class Timer extends Component {
     handleClickStop(e) {
         e.preventDefault();
         e.stopPropagation();
-        console.log('clicked');
 
         this.props.handleClickStop(this.props.id);
     }
@@ -94,6 +92,7 @@ class Timer extends Component {
 
         this.props.handleClickActive(this.props.id);
     }
+
     tick() {
         let now = Date.now();
         let clock = this.props.clock + (now - this.previousTickTime);
