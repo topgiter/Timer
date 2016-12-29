@@ -41,20 +41,32 @@ class TimerList extends Component {
                 </Row>
                 <Row>
                     <Col>
-                        <SortableList
-                            status={this.props.title === 'Active'}
-                            items={this.props.items}
-                            handleChangeClock={this.props.handleChangeClock}
-                            handleClickStart={this.props.handleClickStart}
-                            handleClickStop={this.props.handleClickStop}
-                            handleClickComplete={this.props.handleClickComplete}
-                            handleClickActive={this.props.handleClickActive}
-                            handleEditDescription={this.props.handleEditDescription}
-                            handleClickDelete={this.props.handleClickDelete}
-                            onSortEnd={this.props.onSortEnd}
-                            pressDelay={this.props.pressDelay}
-                            shouldCancelStart={this.shouldCancelStart}
-                        />
+                        {(() => {
+                            if (this.props.items.length === 0) {
+                                return (
+                                    <p className="text-center">
+                                        {`No ${this.props.title} Timers`}
+                                    </p>
+                                );
+                            } else {
+                                return (
+                                    <SortableList
+                                        status={this.props.title === 'Active'}
+                                        items={this.props.items}
+                                        handleChangeClock={this.props.handleChangeClock}
+                                        handleClickStart={this.props.handleClickStart}
+                                        handleClickStop={this.props.handleClickStop}
+                                        handleClickComplete={this.props.handleClickComplete}
+                                        handleClickActive={this.props.handleClickActive}
+                                        handleEditDescription={this.props.handleEditDescription}
+                                        handleClickDelete={this.props.handleClickDelete}
+                                        onSortEnd={this.props.onSortEnd}
+                                        pressDelay={this.props.pressDelay}
+                                        shouldCancelStart={this.shouldCancelStart}
+                                    />
+                                );
+                            }
+                        })()}
                     </Col>
                 </Row>
             </Grid>
