@@ -21,8 +21,8 @@ const defaultProps = {
 
 class TimerList extends Component {
     shouldCancelStart(e) {
-        // Cancel sorting if the event target is an `input`, `textarea`, `select` or `option`
-        if (['input', 'textarea', 'select', 'option', 'button'].indexOf(e.target.tagName.toLowerCase()) !== -1) {
+        // Cancel sorting if the event target is an `input`, `textarea`, `select`, `option`, 'button' or 'a'
+        if (['input', 'textarea', 'select', 'option', 'button', 'a'].indexOf(e.target.tagName.toLowerCase()) !== -1) {
             return true; // Return true to cancel sorting
         }
     }

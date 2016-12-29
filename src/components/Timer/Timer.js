@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { Row, Col, Button } from 'react-bootstrap';
+import { Row, Col, Button, DropdownButton, MenuItem } from 'react-bootstrap';
 
 const DELAY = 100;   // milliseconds to tick
 
@@ -29,7 +29,6 @@ class Timer extends Component {
         // Binding
         this.handleClickStop = this.handleClickStop.bind(this);
         this.handleClickStart = this.handleClickStart.bind(this);
-        this.handleClickComplete = this.handleClickComplete.bind(this);
         this.tick = this.tick.bind(this);
     }
 
@@ -77,13 +76,6 @@ class Timer extends Component {
         e.stopPropagation();
 
         this.props.handleClickStop(this.props.id);
-    }
-
-    handleClickComplete(e) {
-        e.preventDefault();
-        e.stopPropagation();
-
-        this.props.handleClickComplete(this.props.id);
     }
 
     handleClickActive(e) {
@@ -148,7 +140,18 @@ class Timer extends Component {
                             }
 
                             buttonGroups.push(
-                                <Button key={2} bsStyle="warning" onClick={(e) => {this.handleClickComplete(e)}}>Completed</Button>
+                                <DropdownButton
+                                    key={2}
+                                    id="action-dropdown"
+                                    title="Actions"
+                                >
+                                    <MenuItem onClick={(e) => this.props.handleEditDescription(this.props.id)}>
+                                        Edit description
+                                    </MenuItem>
+                                    <MenuItem onClick={(e) => this.props.handleClickComplete(this.props.id)}>
+                                        Mark as completed
+                                    </MenuItem>
+                                </DropdownButton>
                             );
                         } else {
                             buttonGroups.push(
