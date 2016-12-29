@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { Row, Col, Button, DropdownButton, MenuItem } from 'react-bootstrap';
+import { Row, Col, Button, ButtonToolbar, DropdownButton, MenuItem } from 'react-bootstrap';
 
 const DELAY = 100;   // milliseconds to tick
 
@@ -11,7 +11,8 @@ const propTypes = {
     status: PropTypes.bool,
     handleClickStart: PropTypes.func,
     handleClickStop: PropTypes.func,
-    handleClickComplete: PropTypes.func
+    handleClickComplete: PropTypes.func,
+    handleEditDescription: PropTypes.func,
 };
 
 const defaultProps = {
@@ -118,50 +119,51 @@ class Timer extends Component {
                 </Col>
 
                 <Col xs={6} sm={5} className="text-right">
-                    {(() => {
-                        let buttonGroups = [];
+                    <ButtonToolbar style={{float: "right"}}>
+                        {(() => {
+                            let buttonGroups = [];
 
-                        if (this.props.status === true) {
-                            if (this.props.isPlaying === true) {
+                            if (this.props.status === true) {
+                                if (this.props.isPlaying === true) {
+                                    buttonGroups.push(
+                                        <Button
+                                            key={1}
+                                            bsStyle="info"
+                                            onClick={(e) => this.handleClickStop(e)}
+                                            onMouseDown={(e) => {e.stopPropagation()}}
+                                        >
+                                            Stop
+                                        </Button>
+                                    );
+                                } else {
+                                    buttonGroups.push(
+                                        <Button key={1} bsStyle="primary" onClick={(e) => this.handleClickStart(e)}>Start</Button>
+                                    );
+                                }
+
                                 buttonGroups.push(
-                                    <Button
-                                        key={1}
-                                        bsStyle="info"
-                                        onClick={(e) => this.handleClickStop(e)}
-                                        onMouseDown={(e) => {e.stopPropagation()}}
+                                    <DropdownButton
+                                        key={2}
+                                        id="action-dropdown"
+                                        title="Actions"
                                     >
-                                        Stop
-                                    </Button>
+                                        <MenuItem onClick={(e) => this.props.handleEditDescription(this.props.id)}>
+                                            Edit description
+                                        </MenuItem>
+                                        <MenuItem onClick={(e) => this.props.handleClickComplete(this.props.id)}>
+                                            Mark as completed
+                                        </MenuItem>
+                                    </DropdownButton>
                                 );
                             } else {
                                 buttonGroups.push(
-                                    <Button key={1} bsStyle="primary" onClick={(e) => this.handleClickStart(e)}>Start</Button>
+                                    <Button key={1} bsStyle="primary" onClick={(e) => {this.handleClickActive(e)}}>Active</Button>
                                 );
                             }
 
-                            buttonGroups.push(
-                                <DropdownButton
-                                    key={2}
-                                    id="action-dropdown"
-                                    title="Actions"
-                                >
-                                    <MenuItem onClick={(e) => this.props.handleEditDescription(this.props.id)}>
-                                        Edit description
-                                    </MenuItem>
-                                    <MenuItem onClick={(e) => this.props.handleClickComplete(this.props.id)}>
-                                        Mark as completed
-                                    </MenuItem>
-                                </DropdownButton>
-                            );
-                        } else {
-                            buttonGroups.push(
-                                <Button key={1} bsStyle="primary" onClick={(e) => {this.handleClickActive(e)}}>Active</Button>
-                            );
-                        }
-
-                        return buttonGroups;
-                    })()}
-
+                            return buttonGroups;
+                        })()}
+                    </ButtonToolbar>
                 </Col>
 
                 <Col xs={6} sm={1} className="text-right">

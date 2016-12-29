@@ -9,6 +9,7 @@ const propTypes = {
     handleClickStop: PropTypes.func,
     handleClickComplete: PropTypes.func,
     handleClickActive: PropTypes.func,
+    handleEditDescription: PropTypes.func,
     onSortEnd: PropTypes.func.isRequired,
     pressDelay: PropTypes.number,
     title: PropTypes.string
@@ -47,6 +48,7 @@ class TimerList extends Component {
                             handleClickStop={this.props.handleClickStop}
                             handleClickComplete={this.props.handleClickComplete}
                             handleClickActive={this.props.handleClickActive}
+                            handleEditDescription={this.props.handleEditDescription}
                             onSortEnd={this.props.onSortEnd}
                             pressDelay={this.props.pressDelay}
                             shouldCancelStart={this.shouldCancelStart}

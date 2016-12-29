@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { Modal, Button, FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 
 const propTypes = {
+    timerId: PropTypes.number,
     show: PropTypes.bool.isRequired,
     description: PropTypes.string,
     onHide: PropTypes.func.isRequired,
@@ -26,20 +27,21 @@ class DescriptionModal extends Component {
         this.handleClickOk = this.handleClickOk.bind(this);
     }
 
-    initiateDescription(description) {
+    initiateDescription() {
         this.setState({
-            description: description
+            description: this.props.description,
+            timerId: this.props.timerId
         });
     }
 
     componentDidMount() {
-        this.initiateDescription(this.props.description);
+        this.initiateDescription();
     }
 
     componentWillReceiveProps(nextProps) {
         if (this.props.show !== nextProps.show && nextProps.show === true) {
             // Initiate description when modal is reopend
-            this.initiateDescription(this.props.description);
+            this.initiateDescription();
         }
     }
     
@@ -50,7 +52,7 @@ class DescriptionModal extends Component {
     }
 
     handleClickOk() {
-        this.props.onChangeDescription(this.state.description);
+        this.props.onChangeDescription(this.state.description, this.props.timerId);
         this.props.onHide();
     }
 

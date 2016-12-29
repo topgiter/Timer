@@ -33,7 +33,9 @@ class App extends Component {
                 }
             ],
             completed: [],
-            isShowDescriptionModal: false
+            isShowDescriptionModal: false,
+            isShowEditDescriptionModal: false,
+            editTimer: undefined
         };
 
         // Binding
@@ -46,6 +48,7 @@ class App extends Component {
         this.handleCloseModal = this.handleCloseModal.bind(this);
         this.handleOpenModal = this.handleOpenModal.bind(this);
         this.handleChangeDescription = this.handleChangeDescription.bind(this);
+        this.handleEditDescription = this.handleEditDescription.bind(this);
     }
 
     handleChangeClock(id, clock) {
@@ -139,14 +142,22 @@ class App extends Component {
         });
     }
 
+    handleEditDescription(timerId) {
+        this.setState({
+            editTimer: this.state.active.find(timer => timer.id === timerId)
+        }, () => {
+            this.handleOpenModal('EditDescription');
+        });
+    }
+
     handleChangeDescription(description, timerId) {
         // TODO timer ID should be sync with backend DB
 
-        if (timerId === undefined) {
+        if (timerId === undefined) {    // If new timer
             // Generate unique ID for each timer by using Date timestamp temperarily
             const timerId = Date.now();
 
-            // Generate a new timer
+            // Generate a new timer with 'description'
             const timerItem = {
                 id: timerId,
                 description: description,
@@ -157,6 +168,17 @@ class App extends Component {
             // Add new timer at top of Active list
             this.setState({
                 active: [timerItem, ...this.state.active]
+            });
+        } else {    // If existing timer
+            // Update description of timer
+            this.setState({
+                active: this.state.active.map(timer => {
+                    if (timer.id === timerId) {
+                        timer.description = description;
+                    }
+
+                    return timer;
+                })
             });
         }
     }
@@ -183,6 +205,7 @@ class App extends Component {
                     handleClickStart={this.handleClickStart}
                     handleClickStop={this.handleClickStop}
                     handleClickComplete={this.handleClickComplete}
+                    handleEditDescription={this.handleEditDescription}
                     onSortEnd={(e) => this.handleSortEnd('active', e)}
                 />
                 <TimerList
@@ -197,6 +220,16 @@ class App extends Component {
                     onHide={(e) => this.handleCloseModal('Description')}
                     onChangeDescription={this.handleChangeDescription}
                 />
+
+                {this.state.editTimer && 
+                    <DescriptionModal
+                        timerId={this.state.editTimer.id}
+                        description={this.state.editTimer.description}
+                        show={this.state.isShowEditDescriptionModal}
+                        onHide={(e) => this.handleCloseModal('EditDescription')}
+                        onChangeDescription={this.handleChangeDescription}
+                    />
+                }
             </div>
         );
     }
