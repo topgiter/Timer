@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import TimerList from './components/DndList/TimerList';
-import DescriptionModal from './components/Modals/DescriptionModal';
+
 import { arrayMove } from 'react-sortable-hoc';
-import { Grid, Row, Col, Button } from 'react-bootstrap';
+import { Grid, Row, Col, Button, FormControl, ButtonToolbar } from 'react-bootstrap';
 import './App.css';
 
 class App extends Component {
@@ -33,9 +33,10 @@ class App extends Component {
                 }
             ],
             completed: [],
-            isShowDescriptionModal: false,
-            isShowEditDescriptionModal: false,
-            editTimer: undefined
+            editTimer: {
+                id: undefined,
+                description: '',
+            }
         };
 
         // Binding
@@ -48,8 +49,8 @@ class App extends Component {
         this.handleCloseModal = this.handleCloseModal.bind(this);
         this.handleOpenModal = this.handleOpenModal.bind(this);
         this.handleChangeDescription = this.handleChangeDescription.bind(this);
-        this.handleEditDescription = this.handleEditDescription.bind(this);
         this.handleClickDelete = this.handleClickDelete.bind(this);
+        this.handleClickCreate =  this.handleClickCreate.bind(this);
     }
 
     handleChangeClock(id, clock) {
@@ -143,33 +144,20 @@ class App extends Component {
         });
     }
 
-    handleEditDescription(timerId) {
-        this.setState({
-            editTimer: this.state.active.find(timer => timer.id === timerId)
-        }, () => {
-            this.handleOpenModal('EditDescription');
-        });
-    }
+    handleChangeDescription(e, timerId) {
+        const description = e.target.value;
 
-    handleChangeDescription(description, timerId) {
         // TODO timer ID should be sync with backend DB
 
         if (timerId === undefined) {    // If new timer
-            // Generate unique ID for each timer by using Date timestamp temperarily
-            const timerId = Date.now();
-
-            // Generate a new timer with 'description'
-            const timerItem = {
-                id: timerId,
-                description: description,
-                clock: 0,
-                isPlaying: false
-            };
-
-            // Add new timer at top of Active list
-            this.setState({
-                active: [timerItem, ...this.state.active]
-            });
+            // Change edit timer's state
+            this.setState(
+                Object.assign({}, this.state, {
+                    editTimer: Object.assign({}, this.state.editTimer, {
+                        description: description
+                    })
+                })
+            );
         } else {    // If existing timer
             // Update description of timer
             this.setState({
@@ -184,6 +172,25 @@ class App extends Component {
         }
     }
 
+    handleClickCreate() {
+        // Generate a timer params
+        const timerId = Date.now();
+
+        const timer = {
+            id: timerId,
+            description: this.state.editTimer.description,
+            clock: 0,
+            isPlaying: false
+        };
+
+        this.setState({
+            active: [timer, ...this.state.active],
+            editTimer: Object.assign({}, this.state.editTimer, {
+                description: ''
+            })
+        });
+    }
+
     handleClickDelete(timerId) {
         this.setState({
             completed: this.state.completed.filter(timer => timer.id !== timerId)
@@ -195,13 +202,18 @@ class App extends Component {
             <div className="App">
                 <Grid>
                     <Row>
-                        <Col className="text-right">
-                            <Button
-                                bsStyle="primary"
-                                onClick={(e) => this.handleOpenModal('Description')}
-                            >
-                                Add new timer
-                            </Button>
+                        <Col xs={12} sm={6}>
+                            <FormControl
+                                type="text"
+                                value={this.state.editTimer.description}
+                                placeholder="Create a new timer here"
+                                onChange={(e) => {this.handleChangeDescription(e)}}
+                            />
+                        </Col>
+                        <Col xs={6} sm={5} className="text-right">
+                            <ButtonToolbar style={{float: "right"}}>
+                                <Button key={1} bsStyle="primary" onClick={this.handleClickCreate}>Create</Button>
+                            </ButtonToolbar>
                         </Col>
                     </Row>
                 </Grid>
@@ -212,7 +224,7 @@ class App extends Component {
                     handleClickStart={this.handleClickStart}
                     handleClickStop={this.handleClickStop}
                     handleClickComplete={this.handleClickComplete}
-                    handleEditDescription={this.handleEditDescription}
+                    handleChangeDescription={this.handleChangeDescription}
                     onSortEnd={(e) => this.handleSortEnd('active', e)}
                 />
                 <TimerList
@@ -220,9 +232,11 @@ class App extends Component {
                     items={this.state.completed}
                     handleClickActive={this.handleClickActive}
                     handleClickDelete={this.handleClickDelete}
+                    handleChangeDescription={this.handleChangeDescription}
                     onSortEnd={(e) => this.handleSortEnd('completed', e)}
                 />
 
+{/*
                 <DescriptionModal
                     show={this.state.isShowDescriptionModal}
                     onHide={(e) => this.handleCloseModal('Description')}
@@ -238,6 +252,7 @@ class App extends Component {
                         onChangeDescription={this.handleChangeDescription}
                     />
                 }
+*/}
             </div>
         );
     }

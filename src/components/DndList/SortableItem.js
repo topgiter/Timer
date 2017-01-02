@@ -4,26 +4,26 @@ import { SortableElement } from 'react-sortable-hoc';
 
 const SortableItem = SortableElement(({
     item,
-    status,
+    title,
     handleChangeClock,
     handleClickStart,
     handleClickStop,
     handleClickComplete,
     handleClickActive,
-    handleEditDescription,
+    handleChangeDescription,
     handleClickDelete
 }) => {
     return (
         <li className="list-group-item">
             <Timer 
                 {...item}
-                status={status}
+                title={title}
                 handleChangeClock={handleChangeClock}
                 handleClickStart={handleClickStart}
                 handleClickStop={handleClickStop}
                 handleClickComplete={handleClickComplete}
                 handleClickActive={handleClickActive}
-                handleEditDescription={handleEditDescription}
+                handleChangeDescription={handleChangeDescription}
                 handleClickDelete={handleClickDelete}
             />
         </li>

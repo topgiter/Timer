@@ -5,13 +5,13 @@ import { SortableContainer } from 'react-sortable-hoc';
 
 const SortableList = SortableContainer(({
     items,
-    status,
+    title,
     handleChangeClock,
     handleClickStart,
     handleClickStop,
     handleClickComplete,
     handleClickActive,
-    handleEditDescription,
+    handleChangeDescription,
     handleClickDelete
 }) => {
     return (
@@ -21,13 +21,13 @@ const SortableList = SortableContainer(({
                     key={`item-${index}`}
                     index={index}
                     item={item}
-                    status={status}
+                    title={title}
                     handleChangeClock={handleChangeClock}
                     handleClickStart={handleClickStart}
                     handleClickStop={handleClickStop}
                     handleClickComplete={handleClickComplete}
                     handleClickActive={handleClickActive}
-                    handleEditDescription={handleEditDescription}
+                    handleChangeDescription={handleChangeDescription}
                     handleClickDelete={handleClickDelete}
                 />
             )}

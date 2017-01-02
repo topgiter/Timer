@@ -9,7 +9,7 @@ const propTypes = {
     handleClickStop: PropTypes.func,
     handleClickComplete: PropTypes.func,
     handleClickActive: PropTypes.func,
-    handleEditDescription: PropTypes.func,
+    handleChangeDescription: PropTypes.func,
     handleClickDelete: PropTypes.func,
     onSortEnd: PropTypes.func.isRequired,
     pressDelay: PropTypes.number,
@@ -51,14 +51,14 @@ class TimerList extends Component {
                             } else {
                                 return (
                                     <SortableList
-                                        status={this.props.title === 'Active'}
+                                        title={this.props.title}
                                         items={this.props.items}
                                         handleChangeClock={this.props.handleChangeClock}
                                         handleClickStart={this.props.handleClickStart}
                                         handleClickStop={this.props.handleClickStop}
                                         handleClickComplete={this.props.handleClickComplete}
                                         handleClickActive={this.props.handleClickActive}
-                                        handleEditDescription={this.props.handleEditDescription}
+                                        handleChangeDescription={this.props.handleChangeDescription}
                                         handleClickDelete={this.props.handleClickDelete}
                                         onSortEnd={this.props.onSortEnd}
                                         pressDelay={this.props.pressDelay}
