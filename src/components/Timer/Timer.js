@@ -13,7 +13,8 @@ const propTypes = {
     handleClickStop: PropTypes.func,
     handleClickComplete: PropTypes.func,
     handleChangeDescription: PropTypes.func,
-    handleClickDelete: PropTypes.func
+    handleClickDelete: PropTypes.func,
+    handleShowManualModal: PropTypes.func
 };
 
 const defaultProps = {
@@ -144,7 +145,7 @@ class Timer extends Component {
                                     <Button key={2} onClick={(e) => this.props.handleClickComplete(this.props.id)}>Completed</Button>
                                 );
                                 buttonGroups.push(
-                                   <Button key={3} onClick={(e) => {}}>Add Manual</Button>
+                                   <Button key={3} onClick={(e) => this.props.handleShowManualModal(this.props.id)}>Add Manual</Button>
                                 );
                             } else {
                                 buttonGroups.push(

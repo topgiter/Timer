@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import TimerList from './components/DndList/TimerList';
-
+import ManualModal from './components/Modals/ManualModal';
 import { arrayMove } from 'react-sortable-hoc';
 import { Grid, Row, Col, Button, FormControl, ButtonToolbar } from 'react-bootstrap';
 import './App.css';
@@ -33,6 +33,8 @@ class App extends Component {
                 }
             ],
             completed: [],
+            isShowManualModal: false,
+            selectedTimer: undefined,
             editTimer: {
                 id: undefined,
                 description: '',
@@ -51,6 +53,8 @@ class App extends Component {
         this.handleChangeDescription = this.handleChangeDescription.bind(this);
         this.handleClickDelete = this.handleClickDelete.bind(this);
         this.handleClickCreate =  this.handleClickCreate.bind(this);
+        this.handleShowManualModal = this.handleShowManualModal.bind(this);
+        this.handleAddManual = this.handleAddManual.bind(this);
     }
 
     handleChangeClock(id, clock) {
@@ -197,6 +201,25 @@ class App extends Component {
         });
     }
 
+    handleShowManualModal(timerId) {
+        this.setState({
+            selectedTimer: this.state.active.filter(timer => timer.id === timerId)[0],
+            isShowManualModal: true
+        });
+    }
+
+    handleAddManual(timerId, milliseconds) {
+        this.setState({
+            active: this.state.active.map(timer => {
+                if (timer.id === timerId) {
+                    timer.clock += milliseconds;
+                }
+
+                return timer;
+            })
+        });
+    }
+
     render() {
         return (
             <div className="App">
@@ -225,6 +248,7 @@ class App extends Component {
                     handleClickStop={this.handleClickStop}
                     handleClickComplete={this.handleClickComplete}
                     handleChangeDescription={this.handleChangeDescription}
+                    handleShowManualModal={this.handleShowManualModal}
                     onSortEnd={(e) => this.handleSortEnd('active', e)}
                 />
                 <TimerList
@@ -236,6 +260,15 @@ class App extends Component {
                     onSortEnd={(e) => this.handleSortEnd('completed', e)}
                 />
 
+                {this.state.selectedTimer !== undefined &&
+                    <ManualModal
+                        timerId={this.state.selectedTimer.id}
+                        show={this.state.isShowManualModal}
+                        description={this.state.selectedTimer.description}
+                        onHide={(e) => this.handleCloseModal('Manual')}
+                        handleAddManual={this.handleAddManual}
+                    />
+                }
 {/*
                 <DescriptionModal
                     show={this.state.isShowDescriptionModal}
