@@ -113,6 +113,7 @@ class App extends Component {
 
         this.setState(
             Object.assign({}, this.state, {
+                isPlayingId: -1,
                 active: this.state.active.filter(item => item.id !== id),
                 completed: [completedItem, ...this.state.completed]
             })
